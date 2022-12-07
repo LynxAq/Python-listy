@@ -27,28 +27,33 @@ def word_checker(s1,s):
 
 slowa = set(open('popularne_slowa.txt', encoding='utf8').read().split())
 
-name = 'Boleslaw Prus'
-set_slow = set()
-set_slow1 = set()
-set_iteracji = set()
-for word in slowa:
-    if word.isalpha():
-        set_slow.add(word)
+#name = 'Boleslaw Prus'
+def funkcja(name):
+    set_slow = set()
+    set_slow1 = set()
+    set_iteracji = set()
 
-#print(set_slow)
 
-for item in set_slow:
-    if len(item) <= len(name):
-        if word_checker(item,name) == item:
-            set_slow1.add(item)
+    for word in slowa:
+        if word.isalpha():
+            set_slow.add(word)
 
-while len(set_iteracji) == 0:
-    x = random.choice(list(set_slow1))
-    length_left = len(name) - len(x) - 1 #-1 bo usuwamy spacje
+    #print(set_slow)
 
-    for slowo in set_slow1:
-        if len(slowo) == length_left:
-            if word_checker(x + ' ' + slowo,name) == x + ' ' + slowo:
-                set_iteracji.add(x + ' ' + slowo)
+    for item in set_slow:
+        if len(item) <= len(name):
+            if word_checker(item,name) == item:
+                set_slow1.add(item)
 
-print(set_iteracji)
+    while len(set_iteracji) == 0:
+        x = random.choice(list(set_slow1))
+        length_left = len(name) - len(x) - 1 #-1 bo usuwamy spacje
+
+        for slowo in set_slow1:
+            if len(slowo) == length_left:
+                if word_checker(x + ' ' + slowo,name) == x + ' ' + slowo:
+                    set_iteracji.add(x + ' ' + slowo)
+
+    print(set_iteracji)
+
+funkcja('Bolesław Prus')
