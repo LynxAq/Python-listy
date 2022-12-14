@@ -1,0 +1,83 @@
+import turtle as t
+import numpy as np
+np.set_printoptions(threshold=np.inf)
+t.tracer(n=1000, delay=0)
+
+
+def square():
+    t.pencolor('black')
+    t.begin_fill()
+    for i in range(4):
+        t.forward(5)
+        t.right(90)
+    t.end_fill()
+
+def get_flattened(height_matrix):
+    x = np.random.randint(1, height_matrix.shape[0]-1)
+    y = np.random.randint(1, height_matrix.shape[1]-1)
+    average = (height_matrix[x-1,y] + height_matrix[x,y] + height_matrix[x+1,y] + height_matrix[x-1,y+1] + height_matrix[x,y+1] + height_matrix[x+1,y+1] + height_matrix[x-1,y-1] + height_matrix[x,y-1] + height_matrix[x+1,y-1])/9
+    height_matrix[x,y] = average
+    return height_matrix
+
+
+
+
+def generate_terrain(sizex,sizey,mountains):
+    height = np.zeros((sizex,sizey))
+
+    for item in range(mountains):
+        x = np.random.randint(0, sizex)  #  value between
+        y = np.random.randint(0, sizey)
+        height[x,y] = 1
+    return height
+
+
+sizex = 100
+sizey = 100
+mountains = 5000
+height_matrix = generate_terrain(sizex,sizey,mountains)
+#print(height_matrix)
+for whatever in range(25000):
+    new = get_flattened(height_matrix)
+    height_matrix = new
+#print(height_matrix)
+kolory = ['green', (0.5, 1, 0) , 'yellow', 'orange', 'red', (0.5, 0 , 0) ]
+
+maximum = np.max(height_matrix)
+normalized_heights = height_matrix / maximum
+normalized_heights = normalized_heights.astype('str')
+x = 0
+y = 0
+for every in normalized_heights:
+    for i in every:
+        i = float(i)
+        if i <= 0.16:
+            normalized_heights[x,y] = '(0, 0.5 , 0)'
+        elif i > 0.16 and i <= 0.32:
+            normalized_heights[x,y] = '(0.5, 1, 0)'
+        elif i > 0.32 and i <= 0.49:
+            normalized_heights[x,y] = '(1 , 1 , 0)'
+        elif i > 0.49 and i <= 0.66:
+            normalized_heights[x,y] = '(1, 0.5, 0)'
+        elif i > 0.66 and i <= 0.8:
+            normalized_heights[x,y] = '(1, 0, 0)'
+        else:
+            normalized_heights[x,y] = '(0.5, 0 , 0)'
+        y += 1
+    x += 1
+    y = 0
+axisx = -120
+for line in normalized_heights:
+    t.penup()
+    t.setposition(axisx,200)
+    t.pendown()
+    for colour in line:
+        kolor = np.array(eval(colour))
+        t.color(kolor)
+        square()
+        t.right(90)
+        t.fd(5)
+        t.left(90)
+    axisx = axisx + 5
+
+t.exitonclick()
